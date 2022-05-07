@@ -1,5 +1,5 @@
 /*
-	compile: gcc -Wall html_creator.c -o html_creator
+	compile: gcc -Wall html_creator.c -o html_creator -lm
 	duplicates file, but doubling the next ones size
 	usage: experimenting with a multi-server application over multi-port hop
 	to test efficiency of a XDP filter, vs tradition nftables and iptable filters
@@ -14,12 +14,13 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <math.h>
 
 #define BUFFSIZE 4096
-#define MAXLENGTH 3
+#define MAXLENGTH 10
 
 /*create 100 files of doubling size*/
-#define NUMFILES 1000
+#define NUMFILES 20
 
 
 void itoa(int n, char s[]);
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]){
 		
 		fd_write = open (tmpname, O_RDWR | O_CREAT, 0666);
 
-		for (int j = 0; j < i; ++j) {
+		for (int j = 0; j < pow(2,i); ++j) {
 			
 			fd_read = open (argv[1], O_RDONLY, S_IRWXU);
 
@@ -90,16 +91,16 @@ void itoa(int n, char s[]){
 
 }
 
-void reverse(char s[]){
 
-	char reversed[MAXLENGTH];
-	int i = 0;
-	int j = strlen(s);
+void reverse(char s[])
+{
+    int length = strlen(s) ;
+    int c, i, j;
 
-	while(s[i] != '\0') {
-
-		reversed[i] = s[j-1-i];
-		i++;
-	}
-	s[i] = '\0';
+    for (i = 0, j = length - 1; i < j; i++, j--)
+    {
+        c = s[i];
+        s[i] = s[j];
+        s[j] = c;
+    }
 }
