@@ -19,7 +19,7 @@
 #define MAXLENGTH 3
 
 /*create 100 files of doubling size*/
-#define NUMFILES 100 
+#define NUMFILES 1000
 
 
 void itoa(int n, char s[]);
