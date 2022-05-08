@@ -12,4 +12,4 @@ sudo tcpdump -i any -nn port 9003
 sudo tcpdump -i any -nn port 9004
 
 #this is to observe all ports at once
-#sudo tcpdump -i any port {9000 or 9001 or 9002 or 9003 or 9004}
+sudo tcpdump -i any port {9000 or 9001 or 9002 or 9003 or 9004}
