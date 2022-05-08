@@ -32,5 +32,7 @@ int udpfilter(struct xdp_md *ctx) {
     }
   }
   return XDP_PASS;
+  //return XDP_TX;
+  //return XDP_REDIRECT
 }
 
