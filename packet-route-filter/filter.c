@@ -42,12 +42,13 @@ int udpfilter(struct xdp_md *ctx) {
 					last.update(&key, &dest);
 					org_src = last.lookup(&key);
 
-					if (org_src != NULL)
-						bpf_trace_printk("hash element:  %lld\n",*org_src);
+					//if (org_src != NULL)
+						//bpf_trace_printk("hash element:  %lld\n",*org_src);
 
 					bpf_trace_printk("forward from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(7997);
 					tcp->source = ntohs(7996);
+  					return XDP_TX;
 			  }
 
 			  /*port hop #2*/
@@ -56,6 +57,7 @@ int udpfilter(struct xdp_md *ctx) {
 					bpf_trace_printk("forward from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(7998);
 					tcp->source = ntohs(7997);
+  					return XDP_TX;
 			  }
 
 			  /*port hop #3*/
@@ -64,6 +66,7 @@ int udpfilter(struct xdp_md *ctx) {
 					bpf_trace_printk("forward from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(7999);
 					tcp->source = ntohs(7998);
+  					return XDP_TX;
 			  }
 
 			  /*port hop #4*/
@@ -72,6 +75,7 @@ int udpfilter(struct xdp_md *ctx) {
 					bpf_trace_printk("forward from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(8000);
 					tcp->source = ntohs(7999);
+  					return XDP_TX;
 	    			
 			  }
 
@@ -82,6 +86,7 @@ int udpfilter(struct xdp_md *ctx) {
 					bpf_trace_printk("reverse from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(7998);
 					tcp->source = ntohs(7999);
+  					return XDP_TX;
 			  }
 
 			  /*port hop #6: trail is being reversed. Reached port 7998*/
@@ -90,6 +95,7 @@ int udpfilter(struct xdp_md *ctx) {
 					bpf_trace_printk("reverse from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(7997);
 					tcp->source = ntohs(7998);
+  					return XDP_TX;
 			  }
 
 			  /*port hop #7: trail is being reversed. Reached port 7997*/
@@ -98,6 +104,7 @@ int udpfilter(struct xdp_md *ctx) {
 					bpf_trace_printk("reverse from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
 					tcp->dest = ntohs(7996);
 					tcp->source = ntohs(7997);
+  					return XDP_TX;
 			  }
 
 			  /*
@@ -107,7 +114,8 @@ int udpfilter(struct xdp_md *ctx) {
 				  bpf_trace_printk("8000 send packet back to 7999...    dest: %d source: %d ",ntohs(tcp->dest), ntohs(tcp->source) );
 
 			  */
-
+			
+			  /*last hop back to source*/
 			  if (tcp->dest == ntohs(7996) && tcp->source == ntohs(7997)) {
 		    
 				bpf_trace_printk("reverse from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
@@ -118,6 +126,7 @@ int udpfilter(struct xdp_md *ctx) {
             	    			bpf_trace_printk("return from 7996 to org src\n");
 		    		}
 				bpf_trace_printk("reverse from source %d to dest port %d\n",ntohs(tcp->source), ntohs(tcp->dest));
+  				return XDP_TX;
 	    			
 			  }
 
