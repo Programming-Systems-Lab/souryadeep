@@ -11,9 +11,9 @@ Overview:
 
 ### Usage: on a Debian linux machine
 
+```
 - Tools to download to use [libbpf](https://github.com/libbpf/libbpf) library:
 
-```
 	- sudo apt install zlib-devel
 	- sudo apt-get install -y libelf-dev
 	- ensure kernel is built with: CONFIG_DEBUG_INFO_BTF=y
