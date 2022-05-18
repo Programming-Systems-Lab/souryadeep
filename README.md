@@ -13,6 +13,7 @@ Overview:
 
 - Tools to download to use [libbpf](https://github.com/libbpf/libbpf) library:
 
+```
 	- sudo apt install zlib-devel
 	- sudo apt-get install -y libelf-dev
 	- ensure kernel is built with: CONFIG_DEBUG_INFO_BTF=y
@@ -37,6 +38,6 @@ Overview:
 	- sudo apt install iptables
 	- sudo apt install netcat
 	- sudo apt install siege
-		
+```		
 
 
